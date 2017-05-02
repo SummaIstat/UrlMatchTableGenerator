@@ -1,0 +1,27 @@
+ FIRM_ID	LINK_POSITION	URL	SCORE_VECTOR	SCORE
+100018	1	http://www.danone.it/	1190110	656
+100018	4	http://www.vividanone.it/contatta_danone	1060000	0
+100018	6	http://www.vividanone.it/my-danone/buoni-sconto/info/	1040000	0
+100018	8	http://www.danone.com/en/	1020000	0
+10014	2	http://www.cantinapaolini.com/	2181110	1000
+10014	7	http://www.cantinekaggera.it/	2130000	314
+10014	8	http://www.cantinedidolianova.it/	2120000	314
+10014	9	http://www.cantinabirgi.it/	2110000	314
+10014	10	http://www.cantinadelterraglio.com/	2100000	314
+100280	1	http://www.bausano.it/it/	1090110	498
+100280	4	http://www.bausano.com/en/	1060010	161
+100280	6	http://www.01machinery.com/it/bausano-varie-linea-completa-tubo-medicale-mm-192-es-5191-95	1040010	161
+100280	8	http://www.01machinery.com/it/macchinari/plastica/estrusione	1020010	161
+100280	11	http://www.bausano.net/it/	1000110	324
+100710	1	http://www.lavsrl.it/	1190000	332
+100710	2	http://www.lavrimini.com/	1180000	332
+100710	4	http://lav-srl.com/	1161111	670
+100710	7	http://www.lasigroup.com/	1130000	158
+100710	8	http://www.aevitalia.com/	1120000	158
+100710	9	http://www.holonix.it/	1110000	158
+100757	1	http://www.gsspa.it/	1190000	332
+100757	2	http://gsitalia.com/	1180000	332
+100757	6	http://www.gsitalia.com/index.php?func=home&mod=prodotti	1040000	0
+100757	10	http://www.cgspace.it/	1100010	319
+100757	3	http://ecommerce.gsspa.net/HTMLPage.htm?aspxerrorpath=%2Flogin.aspx	1070000	0
+100757	7	http://www.gse.it/it/Pages/default.aspx	1030010	161

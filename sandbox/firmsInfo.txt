@@ -1,0 +1,6 @@
+FIRM_ID	FIRM_NAME	OFFICIAL_URL
+100018	DANONE SPA	http://www.danone.it
+10014	CANTINA SOCIALE PAOLINI - SOCIETA' COOPERATIVA AGRICOLA	http://www.cantinapaolini.it
+100280	BAUSANO & FIGLI S.P.A.	http://www.bausano.it
+100710	L.A.V. S.R.L.	http://www.lav-srl.com
+100757	G.S. SPA	http://www.gsspa.it
