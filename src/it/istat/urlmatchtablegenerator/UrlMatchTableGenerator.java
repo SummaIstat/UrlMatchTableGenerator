@@ -15,11 +15,15 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Set;
 
 import org.apache.log4j.Logger;
+import org.apache.log4j.PatternLayout;
+import org.apache.log4j.RollingFileAppender;
 
 /**
 * @author  Donato Summa
@@ -28,14 +32,20 @@ public class UrlMatchTableGenerator {
 	
 	static Logger logger = Logger.getLogger(UrlMatchTableGenerator.class);
 	
+	private static String logFilePath;
 	private String urlScorerOutputFilePath;
 	private String firmsInfoFilePath;
 	private String outputTableFolderPath;
+	private static Set<String> problematicFirms = new HashSet<String>();
 	private List<TableRow> scoreList = new ArrayList<TableRow>();
 	
 	public static void main(String[] args) throws IOException {
 		
-		logger.debug("*******************************************************************");
+		UrlMatchTableGenerator umtg = new UrlMatchTableGenerator();
+        umtg.configure(args);
+        
+		
+        logger.debug("*******************************************************************");
 		logger.debug("********************     START EXECUTION       ********************");
 		logger.debug("*******************************************************************");
         //String now = Utils.getDateTimeAsString();
@@ -44,9 +54,8 @@ public class UrlMatchTableGenerator {
         logger.info("Starting datetime = " + dateFormat.format(startDateTime)); //15/12/2014 15:59:48
 		
 		
-        UrlMatchTableGenerator umtg = new UrlMatchTableGenerator();
-        umtg.configure(args);
-		umtg.generateAndPrintMatchTable();    	
+        umtg.generateAndPrintMatchTable();    	
+		umtg.generateProblemReport();
         
         
         Date endDateTime = new Date();
@@ -55,6 +64,29 @@ public class UrlMatchTableGenerator {
         logger.debug("*******************************************************************");
 		logger.debug("********************     END EXECUTION         ********************");
 		logger.debug("*******************************************************************");
+		
+	}
+
+	private void generateProblemReport() {
+		
+		if (problematicFirms.size() != 0){
+			logger.info("\n\n\n");
+			logger.info("In these cases the printed FirmName and UrlWeHad fields in");
+			logger.info("the output file will have the value \"not available/provided\"");
+			logger.info("\n\n\n");
+			for(String firmId : problematicFirms){
+				logger.info("No information available for the firm having id " + firmId);
+			}
+		}
+		
+		if (Utils.getProblematicUrls().size() != 0){
+			logger.info("\n\n\n");
+			logger.info("In these cases the printed domain will be \"**********\"");
+			logger.info("\n\n\n");
+			for(String url : Utils.getProblematicUrls()){
+				logger.info("problem with the url \"" + url + "\" ===> the printed domain will be \"**********\"");
+			}
+		}
 		
 	}
 
@@ -74,15 +106,18 @@ public class UrlMatchTableGenerator {
 				Properties props = new Properties();
 				props.load(inputStream);
 				
+				// LOG_FILE_PATH
+				configLogFile(props);
+				
 				// FIRMS_INFO_FILE_PATH
 				if(props.getProperty("FIRMS_INFO_FILE_PATH") != null){
 					firmsInfoFilePath = props.getProperty("FIRMS_INFO_FILE_PATH");
 					if (!Utils.isAValidFile(firmsInfoFilePath)){
-			        	System.out.println("The FIRMS_INFO_FILE_PATH parameter that you set ( " + firmsInfoFilePath + " ) is not valid");
+			        	logger.error("The FIRMS_INFO_FILE_PATH parameter that you set ( " + firmsInfoFilePath + " ) is not valid");
 			        	System.exit(1);
 			        }
 				}else{
-					System.out.println("Wrong/No configuration for the parameter FIRMS_INFO_FILE_PATH !");
+					logger.error("Wrong/No configuration for the parameter FIRMS_INFO_FILE_PATH !");
 					System.exit(1);
 				}
 				
@@ -90,11 +125,11 @@ public class UrlMatchTableGenerator {
 				if(props.getProperty("URL_SCORER_OUTPUT_FILE_PATH") != null){
 					urlScorerOutputFilePath = props.getProperty("URL_SCORER_OUTPUT_FILE_PATH");
 					if (!Utils.isAValidFile(urlScorerOutputFilePath)){
-			        	System.out.println("The URL_SCORER_OUTPUT_FILE_PATH parameter that you set ( " + urlScorerOutputFilePath + " ) is not valid");
+			        	logger.error("The URL_SCORER_OUTPUT_FILE_PATH parameter that you set ( " + urlScorerOutputFilePath + " ) is not valid");
 			        	System.exit(1);
 			        }
 				}else{
-					System.out.println("Wrong/No configuration for the parameter PROVINCES_FILE_PATH !");
+					logger.error("Wrong/No configuration for the parameter PROVINCES_FILE_PATH !");
 					System.exit(1);
 				}
 				
@@ -102,18 +137,42 @@ public class UrlMatchTableGenerator {
 				if(props.getProperty("OUTPUT_FOLDER_PATH") != null){
 					outputTableFolderPath = props.getProperty("OUTPUT_FOLDER_PATH");
 					if (!Utils.isAValidDirectory(outputTableFolderPath)){
-			        	System.out.println("The OUTPUT_FOLDER_PATH parameter that you set ( " + outputTableFolderPath + " ) is not valid");
+			        	logger.error("The OUTPUT_FOLDER_PATH parameter that you set ( " + outputTableFolderPath + " ) is not valid");
 			        	System.exit(1);
 			        }
 				}else{
-					System.out.println("Wrong/No configuration for the parameter OUTPUT_FOLDER_PATH !");
+					logger.error("Wrong/No configuration for the parameter OUTPUT_FOLDER_PATH !");
 					System.exit(1);
 				}
 				
 			} else {
-				System.out.println("usage: java -jar UrlMatchTableGenerator.jar [umtgConf.properties fullpath]");
+				logger.info("usage: java -jar UrlMatchTableGenerator.jar [umtgConf.properties fullpath]");
 				System.exit(1);
 			}	
+		}
+		
+	}
+
+	private void configLogFile(Properties props) {
+		
+		if(props.getProperty("LOG_FILE_PATH") != null){
+			
+			logFilePath = props.getProperty("LOG_FILE_PATH");
+			
+			RollingFileAppender rfa = new RollingFileAppender();
+			rfa.setName("FileLogger");
+			rfa.setFile(logFilePath);
+			rfa.setAppend(true);
+			rfa.activateOptions();
+			rfa.setMaxFileSize("20MB");
+			rfa.setMaxBackupIndex(30);
+			rfa.setLayout(new PatternLayout("%d{yyyy-MM-dd HH:mm:ss} %-5p %c{1}:%L - %m%n"));
+
+			Logger.getRootLogger().addAppender(rfa);
+			
+		}else{
+			logger.error("Wrong/missing configuration for the parameter LOG_FILE_PATH !");
+			System.exit(1);
 		}
 		
 	}
@@ -183,19 +242,32 @@ public class UrlMatchTableGenerator {
 			br.close();
 			is.close();
 			
+			String firmId;
+			TableRow tableRow;
 			for (TableRow tr : scoreList) {
-				tr.setFirmName(firmInfoMap.get(tr.getFirmId().trim()).getFirmName());
-				tr.setUrlWeHad(firmInfoMap.get(tr.getFirmId().trim()).getUrlWeHad());
+				firmId = tr.getFirmId();
+				tableRow = firmInfoMap.get(tr.getFirmId().trim());
+				if (tableRow != null){
+					tr.setFirmName(tableRow.getFirmName());
+					tr.setUrlWeHad(tableRow.getUrlWeHad());
+				}else{
+					//logger.info("No information available for the firm having id " + firmId);
+					problematicFirms.add(firmId);
+					tr.setFirmName("not available/provided");
+					tr.setUrlWeHad("not available/provided");
+				}
 			}
 			return scoreList;
 			
 		}catch (FileNotFoundException fnfe) {
 			fnfe.printStackTrace();
 			System.err.println("Error fnfe : " + fnfe.getMessage());
+			logger.error("Error fnfe : " + fnfe.getMessage());
 			System.exit(1);
 		}catch (Exception e) {
 			e.printStackTrace();
 			System.err.println("Error e : " + e.getMessage());
+			logger.error("Error e : " + e.getMessage());
 		}
 		return null;
 	}

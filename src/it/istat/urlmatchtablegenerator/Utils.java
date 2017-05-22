@@ -7,12 +7,19 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.apache.log4j.Logger;
 
 public class Utils {
 
 	static Logger logger = Logger.getLogger(Utils.class);
+	private static Set<String> problematicUrls = new HashSet<String>();
+	
+	public static Set<String> getProblematicUrls(){
+		return problematicUrls;
+	}
 	
 	public static String getDateTimeAsString(){
 		Date dateTime;
@@ -80,7 +87,8 @@ public class Utils {
 	        return host;
 		} catch (MalformedURLException e) {
 			//e.printStackTrace();
-			logger.info("problem with the url " + url + " ===> the printed domain will be **********");
+			//logger.info("problem with the url \"" + url + "\" ===> the printed domain will be \"**********\"");
+			problematicUrls.add(url);
 			return "**********";
 		}
 	}
