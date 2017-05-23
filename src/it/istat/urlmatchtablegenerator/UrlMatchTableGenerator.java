@@ -71,20 +71,22 @@ public class UrlMatchTableGenerator {
 		
 		if (problematicFirms.size() != 0){
 			logger.info("\n\n\n");
+			logger.info("For some scored records there are no corresponding firm information");
 			logger.info("In these cases the printed FirmName and UrlWeHad fields in");
 			logger.info("the output file will have the value \"not available/provided\"");
 			logger.info("\n\n\n");
 			for(String firmId : problematicFirms){
-				logger.info("No information available for the firm having id " + firmId);
+				logger.info("No info available for the firm having id " + firmId);
 			}
 		}
 		
 		if (Utils.getProblematicUrls().size() != 0){
 			logger.info("\n\n\n");
+			logger.info("For some URLs it was not possible to compute the domain");
 			logger.info("In these cases the printed domain will be \"**********\"");
 			logger.info("\n\n\n");
 			for(String url : Utils.getProblematicUrls()){
-				logger.info("problem with the url \"" + url + "\" ===> the printed domain will be \"**********\"");
+				logger.info("problem with the url \"" + url + "\"");
 			}
 		}
 		
