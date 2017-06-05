@@ -1,6 +1,16 @@
 FIRM_ID	FIRM_NAME	OFFICIAL_URL
-100018	DANONE SPA	http://www.danone.it
-10014	CANTINA SOCIALE PAOLINI - SOCIETA' COOPERATIVA AGRICOLA	http://www.cantinapaolini.it
-100280	BAUSANO & FIGLI S.P.A.	http://www.bausano.it
+100228	CAPANNOLI GF SRL	http://www.capannoli.it
+100236	ILPA SRL	http://www.ilpagroup.com
+100285	ZETACOLOR   S.R.L.	http://www.zetacolor.it
+100297	TECNOPARCO VALBASENTO SPA	http://www.tecnoparco-vba.it
+100314	LANDI RENZO SPA	http://www.medautomotive.it
+100446	EUROFOOD S.R.L.	http://www.lemonplus.it
 100710	L.A.V. S.R.L.	http://www.lav-srl.com
-100757	G.S. SPA	http://www.gsspa.it
+100191	VALECO S.P.A.	http://www.valecospa.it
+100010	FRANCESCO PARISI CASA DI SPEDIZIONI SPA	http://www.francescoparisi.com
+100170	RECORD SPA	http://www.record.it
+1001876	C.P.S. DI CONTE IVANO	http://www.cps-conte.it
+100199	ASCOM SERVIZI SPA	http://www.ascom.tv.it
+100272	T.A.C.A.M. S.R.L.	http://www.tacam.com
+10036063	MANZI ANTONIO	http://www.leantichetradizionidimanziantonio.it
+100018	DANONE SPA	http://www.danone.it
